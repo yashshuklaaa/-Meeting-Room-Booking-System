@@ -1,19 +1,16 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema({
-    room: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    title: { type: String, required: true },
+    roomId: { type: mongoose.Schema.Types.ObjectId, ref: 'Room', required: true },
+    userId: { type: String, required: true, default: 'defaultUser' },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
-    recurrence: {
-        type: {
-            type: String,
-            enum: ["none", "daily", "weekly", "monthly"],
-            default: "none"
-        },
-        until: { type: Date } // End date for recurrence
-    },
-    parentId: { type: mongoose.Schema.Types.ObjectId, ref: "Booking" } // For recurring instances
-});
+    isRecurring: { type: Boolean, default: false },
+    recurrenceRule: { type: String },
+    // 👇 ADD THIS LINE
+    exceptionDates: [{ type: Date }], // Stores dates of cancelled single instances
+}, { timestamps: true });
 
-export default mongoose.model("Booking", bookingSchema);
+const Booking = mongoose.model('Booking', bookingSchema);
+export default Booking;

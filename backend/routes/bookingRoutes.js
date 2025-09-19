@@ -1,11 +1,16 @@
-import express from "express";
-import { createBooking, getBookings, cancelBooking } from "../controllers/bookingController.js";
-import protect from "../middleware/authMiddleware.js";
+import express from 'express';
+// 👇 ADD updateBooking and deleteBooking
+import { getBookings, createBooking, updateBooking, deleteBooking } from '../controllers/bookingController.js';
 
 const router = express.Router();
 
-router.post("/", protect, createBooking);
-router.get("/", protect, getBookings);
-router.delete("/:id", protect, cancelBooking);
+router.route('/')
+    .get(getBookings)
+    .post(createBooking);
+
+// 👇 ADD THIS ROUTE
+router.route('/:id')
+    .put(updateBooking)   // For updating a booking
+    .delete(deleteBooking); // For deleting a booking
 
 export default router;
